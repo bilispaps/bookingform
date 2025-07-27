@@ -2,46 +2,64 @@ document.addEventListener('DOMContentLoaded', function () {
     const bookingForm = document.getElementById('bookingForm');
     const statusMessage = document.getElementById('status-message');
     const submitButton = bookingForm.querySelector('button[type="submit"]');
+    const dateInput = document.getElementById('date');
+    const bookingNumberInput = document.getElementById('bookingNumber');
 
-    // Ensure the form exists before adding an event listener
+    // Disable past dates and set min to tomorrow
+    const today = new Date();
+    const tomorrow = new Date(today);
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    const minDate = tomorrow.toISOString().split('T')[0];
+    dateInput.setAttribute('min', minDate);
+    
+    // Generate unique booking number
+    function generateBookingNumber() {
+        const timestamp = Date.now().toString(36).toUpperCase();
+        const randomNum = Math.floor(Math.random() * 1000).toString().padStart(3, '0');
+        return `BILIS-${timestamp}-${randomNum}`;
+    }
+
+    // Initialize booking number
+    bookingNumberInput.value = generateBookingNumber();
+
     if (bookingForm) {
         bookingForm.addEventListener('submit', function (event) {
-            event.preventDefault(); // Prevent the default form submission
+            event.preventDefault();
+            
+            // Regenerate booking number for each submission
+            bookingNumberInput.value = generateBookingNumber();
 
-            // --- Your EmailJS Credentials ---
+            // EmailJS configuration
             const serviceID = 'service_mz1vacl';
-            // Replace with the template IDs you created in Step 1
-            const adminTemplateID = 'template_ix6rrob'; // Your template for admin notifications
-            const userTemplateID = 'template_7hudvzs'; // Your new template for user confirmation
+            const adminTemplateID = 'template_ix6rrob';
+            const userTemplateID = 'template_7hudvzs';
 
-            // Disable button and show sending status to prevent multiple clicks
             submitButton.disabled = true;
             submitButton.textContent = 'Sending...';
             statusMessage.textContent = 'Processing your request...';
             statusMessage.className = 'mt-4 text-center text-blue-600';
 
-            // Create promises for sending each email
-            const sendAdminEmail = emailjs.sendForm(serviceID, adminTemplateID, this);
-            const sendUserEmail = emailjs.sendForm(serviceID, userTemplateID, this);
-
-            // Use Promise.all to wait for both emails to be sent
-            Promise.all([sendAdminEmail, sendUserEmail])
-                .then((responses) => {
-                    console.log('SUCCESS!', responses[0].status, responses[0].text);
-                    statusMessage.textContent = 'Booking request sent! A confirmation has been sent to your email.';
-                    statusMessage.className = 'mt-4 text-center text-green-600 font-bold';
-                    bookingForm.reset(); // Clear the form fields after successful submission
-                })
-                .catch((err) => {
-                    console.error('FAILED...', err);
-                    statusMessage.textContent = 'An error occurred. Please check your details and try again.';
-                    statusMessage.className = 'mt-4 text-center text-red-600 font-bold';
-                })
-                .finally(() => {
-                    // Re-enable the button whether the submission succeeded or failed
-                    submitButton.disabled = false;
-                    submitButton.textContent = 'Submit Booking';
-                });
+            Promise.all([
+                emailjs.sendForm(serviceID, adminTemplateID, this),
+                emailjs.sendForm(serviceID, userTemplateID, this)
+            ])
+            .then(() => {
+                statusMessage.textContent = 'Booking request sent! A confirmation has been sent to your email.';
+                statusMessage.className = 'mt-4 text-center text-green-600 font-bold';
+                bookingForm.reset();
+                
+                // Re-generate booking number after reset
+                bookingNumberInput.value = generateBookingNumber();
+            })
+            .catch((err) => {
+                console.error('Error:', err);
+                statusMessage.textContent = 'An error occurred. Please check your details and try again.';
+                statusMessage.className = 'mt-4 text-center text-red-600 font-bold';
+            })
+            .finally(() => {
+                submitButton.disabled = false;
+                submitButton.textContent = 'Submit Booking';
+            });
         });
     }
 });
