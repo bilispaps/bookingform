@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', function() {
             // Update booking number for this submission
             bookingNumberInput.value = generateBookingNumber();
             
-            const serviceID = 'service_mz1vacl';
+            const serviceID = 'service_x44a9eo';
             const adminTemplateID = 'template_ix6rrob';
             const userTemplateID = 'template_7hudvzs';
             
