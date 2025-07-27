@@ -87,3 +87,11 @@ button:hover {
 .text-blue-600 {
     color: #2563eb;
 }
+
+/* Prevent selecting past dates in date picker */
+input[type="date"]::-webkit-calendar-picker-indicator {
+    cursor: pointer;
+}
+input[type="date"]:in-range::-webkit-calendar-picker-indicator {
+    background: transparent;
+}
