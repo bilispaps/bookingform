@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bilis Paps Delivery - Booking Form</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <!-- Add EmailJS SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+    <script>
+        // Initialize EmailJS with your user ID
+        (function() {
+            // Replace with your actual EmailJS Public Key from your account dashboard
+            emailjs.init("oE3jz4-fjgJD3WKrB");
+        })();
+    </script>
+</head>
+
+<body class="bg-gray-100">
+    <div class="header">
+        <div class="logo-container">
+            <img src="https://i.postimg.cc/bvMsnJxj/bilispaps.png" alt="Bilis Paps Delivery" class="logo">
+        </div>
+        <h1>Bilis Paps Delivery</h1>
+    </div>
+
+    <div class="container mx-auto px-4 py-8">
+        <div class="max-w-2xl mx-auto bg-white rounded-lg shadow-md overflow-hidden">
+            <div class="bg-green-600 py-4 px-6">
+                <h1 class="text-2xl font-bold text-white">Booking Request</h1>
+            </div>
+            
+            <form id="bookingForm" class="p-6">
+                <div class="mb-4">
+                    <label class="block text-gray-700 font-bold mb-2" for="name">
+                        Full Name
+                    </label>
+                    <input class="w-full px-3 py-2 border border-gray-300 rounded-md" 
+                           id="name" name="name" type="text" required>
+                </div>
+                
+                <div class="mb-4">
+                    <label class="block text-gray-700 font-bold mb-2" for="email">
+                        Email
+                    </label>
+                    <input class="w-full px-3 py-2 border border-gray-300 rounded-md" 
+                           id="email" name="email" type="email" required>
+                </div>
+
+                <div class="mb-4">
+                    <label class="block text-gray-700 font-bold mb-2" for="mobilenumber">
+                        Mobile Number
+                    </label>
+                    <input class="w-full px-3 py-2 border border-gray-300 rounded-md" 
+                           id="mobilenumber" name="mobilenumber" type="tel" required>
+                </div>
+
+                <div class="mb-4">
+                    <label class="block text-gray-700 font-bold mb-2" for="pickupPoint">
+                        Pickup Point
+                    </label>
+                    <input class="w-full px-3 py-2 border border-gray-300 rounded-md" 
+                           id="pickupPoint" name="pickupPoint" type="text" required>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700 font-bold mb-2" for="deliverypoint">
+                        Delivery Point
+                    </label>
+                    <input class="w-full px-3 py-2 border border-gray-300 rounded-md" 
+                           id="deliverypoint" name="deliverypoint" type="text" required>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700 font-bold mb-2" for="service">
+                        Service Needed
+                    </label>
+                    <select class="w-full px-3 py-2 border border-gray-300 rounded-md" 
+                            id="service" name="service" required>
+                        <option value="">Select a service</option>
+                        <option value="Delivery Rider">Delivery Rider</option>
+                        <option value="Personal Buyer">Personal Buyer</option>
+                        <option value="Rent a Driver">Rent a Driver</option>
+                    </select>
+                </div>
+                
+                <div class="mb-4">
+                    <label class="block text-gray-700 font-bold mb-2" for="date">
+                        Preferred Date
+                    </label>
+                    <input class="w-full px-3 py-2 border border-gray-300 rounded-md" 
+                           id="date" name="date" type="date" required>
+                </div>
+                 <div class="mb-4">
+                    <label class="block text-gray-700 font-bold mb-2" for="time">
+                        Preferred Time
+                    </label>
+                    <input class="w-full px-3 py-2 border border-gray-300 rounded-md" 
+                           id="time" name="time" type="time" required>
+                </div>
+
+                <div class="mb-4">
+                    <label class="block text-gray-700 font-bold mb-2" for="message">
+                        Additional Notes
+                    </label>
+                    <textarea class="w-full px-3 py-2 border border-gray-300 rounded-md" 
+                              id="message" name="message" rows="4"></textarea>
+                </div>
+                
+                <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                    Submit Booking
+                </button>
+                <div id="status-message" class="mt-4 text-center"></div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Load script.js at the bottom -->
+    <script type="module" src="script.js"></script>
+</body>
+</html>
