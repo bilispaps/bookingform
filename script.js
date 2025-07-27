@@ -5,14 +5,14 @@ document.addEventListener('DOMContentLoaded', function () {
     const dateInput = document.getElementById('date');
     const bookingNumberInput = document.getElementById('bookingNumber');
 
-    // Disable past dates and set min to tomorrow
+    // Set minimum date to tomorrow (disable past dates)
     const today = new Date();
     const tomorrow = new Date(today);
     tomorrow.setDate(tomorrow.getDate() + 1);
     const minDate = tomorrow.toISOString().split('T')[0];
     dateInput.setAttribute('min', minDate);
-    
-    // Generate unique booking number
+
+    // Function to generate booking number
     function generateBookingNumber() {
         const timestamp = Date.now().toString(36).toUpperCase();
         const randomNum = Math.floor(Math.random() * 1000).toString().padStart(3, '0');
@@ -25,11 +25,10 @@ document.addEventListener('DOMContentLoaded', function () {
     if (bookingForm) {
         bookingForm.addEventListener('submit', function (event) {
             event.preventDefault();
-            
+
             // Regenerate booking number for each submission
             bookingNumberInput.value = generateBookingNumber();
 
-            // EmailJS configuration
             const serviceID = 'service_mz1vacl';
             const adminTemplateID = 'template_ix6rrob';
             const userTemplateID = 'template_7hudvzs';
@@ -39,16 +38,23 @@ document.addEventListener('DOMContentLoaded', function () {
             statusMessage.textContent = 'Processing your request...';
             statusMessage.className = 'mt-4 text-center text-blue-600';
 
+            // Add booking number to form data
+            const formData = new FormData(this);
+            formData.append('bookingNumber', bookingNumberInput.value);
+
             Promise.all([
-                emailjs.sendForm(serviceID, adminTemplateID, this),
-                emailjs.sendForm(serviceID, userTemplateID, this)
+                emailjs.send(serviceID, adminTemplateID, Object.fromEntries(formData)),
+                emailjs.send(serviceID, userTemplateID, Object.fromEntries(formData))
             ])
             .then(() => {
                 statusMessage.textContent = 'Booking request sent! A confirmation has been sent to your email.';
                 statusMessage.className = 'mt-4 text-center text-green-600 font-bold';
                 bookingForm.reset();
                 
-                // Re-generate booking number after reset
+                // Reset date to tomorrow after form submission
+                dateInput.min = minDate;
+                
+                // Generate new booking number for next submission
                 bookingNumberInput.value = generateBookingNumber();
             })
             .catch((err) => {
